@@ -5,7 +5,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, Integer> {
+public interface UserRepository extends MongoRepository<User, String> {
+    User findByUserEmailId(String userEmailId);
 
-    User findByUserEmailIdAndUserPassword(String userEmailId, String userPassword);
+    // Add method to check if the email exists
+    boolean existsByUserEmailId(String userEmailId);  // This method checks if an email exists
 }

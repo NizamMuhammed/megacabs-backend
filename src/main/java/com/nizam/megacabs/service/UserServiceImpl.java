@@ -1,11 +1,17 @@
 package com.nizam.megacabs.service;
 
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import com.nizam.megacabs.exception.EmailAlreadyExistsException;
 import com.nizam.megacabs.model.User;
 import com.nizam.megacabs.repository.UserRepository;
-import com.nizam.megacabs.exception.EmailAlreadyExistsException;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
@@ -31,5 +37,14 @@ public class UserServiceImpl implements UserService {
     public boolean signIn(User user) {
         User existingUser = userRepository.findByUserEmailId(user.getUserEmailId());
         return existingUser != null && existingUser.getUserPassword().equals(user.getUserPassword());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        User user = userRepository.findByUserEmailId(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUserEmailId(), user.getUserPassword(), new ArrayList<>());
     }
 }

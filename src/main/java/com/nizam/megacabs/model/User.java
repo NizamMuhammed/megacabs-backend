@@ -1,22 +1,23 @@
 package com.nizam.megacabs.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
-@CrossOrigin(origins = "*")
-@Data
+@Document(collection = "users")
+@Data // This annotation provides getter and setter methods
 @AllArgsConstructor
 @NoArgsConstructor
-@Document
 public class User {
+
     @Id
-    private String userId;  // Use String to handle MongoDB's auto-generation
+    private String id;
+
     private String userName;
     private String userEmailId;
     private String userPassword;
-    private String userRole;
+    //no need to add getter and setter because of the @Data annotation
 }

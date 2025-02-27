@@ -1,11 +1,17 @@
 package com.nizam.megacabs.controller;
 
-import com.nizam.megacabs.model.User;
-import com.nizam.megacabs.service.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nizam.megacabs.model.User;
+import com.nizam.megacabs.service.UserService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -19,7 +25,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {
         // Proceed with registration - the email check is already handled in the service
-        User registeredUser = userService.signUp(user);
+        User registeredUser = userService.signUp(user); // This was the issue.
         return ResponseEntity.ok(registeredUser);
     }
 

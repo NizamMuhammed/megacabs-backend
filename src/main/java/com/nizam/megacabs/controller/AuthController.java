@@ -47,9 +47,9 @@ public class AuthController {
             );
             if (authentication.isAuthenticated()) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userEmailId);
-                String token = jwtUtil.generateToken(userDetails); // Corrected here: passing UserDetails
-                 AuthResponse response = new AuthResponse();
-                 response.setJwt(token);
+                String token = jwtUtil.generateToken(userDetails);
+                User user = userService.findByEmail(userEmailId); 
+                AuthResponse response = new AuthResponse(user.getUserName(), token, user.getUserId()); 
                 return ResponseEntity.ok(response);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");

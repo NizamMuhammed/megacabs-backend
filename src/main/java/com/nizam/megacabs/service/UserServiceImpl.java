@@ -34,23 +34,11 @@ public class UserServiceImpl implements UserService {
     public AuthResponse login(String userEmailId, String userPassword) {
         // Authentication logic (validate credentials, generate JWT, etc.)
         AuthResponse response = new AuthResponse();
-        //response.setJwtToken("your_generated_jwt_token"); // Corrected: setJwt instead of setJwtToken
         return response;
     }
-
-    // @Override
-    // public boolean signIn(User user) {
-    //     // Implement your sign-in logic here
-    //     Optional<User> existingUser = userRepository.findByUserEmailId(user.getUserEmailId());
-    //     if (existingUser.isPresent()) {
-    //         // Check if the password matches
-    //         User retrievedUser = existingUser.get();
-    //         if (passwordEncoder.matches(user.getUserPassword(), retrievedUser.getUserPassword())) {
-    //             // Password matches
-    //             return true;
-    //         }
-    //     }
-    //     // User not found or password doesn't match
-    //     return false;
-    // }
+    
+    @Override
+    public User findByEmail(String userEmailId) {
+        return userRepository.findByUserEmailId(userEmailId).get();
+    }
 }

@@ -2,24 +2,12 @@ package com.nizam.megacabs.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.nizam.megacabs.model.Booking;
-import com.nizam.megacabs.repository.BookingRepository;
 
-@Service
-public class BookingService {
-
-    @Autowired
-    private BookingRepository bookingRepository;
-
-    public Booking saveBooking(Booking booking){
-        return bookingRepository.save(booking);
-    }
-
-    public List<Booking> getBookingsByUserId(String userId) {
-        return bookingRepository.findByUserId(userId);
-    }
-    //other methods
+public interface BookingService {
+    public Booking addBooking(Booking booking);
+    public List<Booking> getAllBookings();
+    public void deleteBooking(String id);
+    List<Booking> getBookingsByUser(String userId); //added this method
 }
+

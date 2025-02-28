@@ -9,7 +9,5 @@ import com.nizam.megacabs.model.Booking;
 
 @Repository
 public interface BookingRepository extends MongoRepository<Booking, String> {
-
-    List<Booking> findByUserId(String userId); // Add this method
-    //other methods
+    List<Booking> findByUserId(String userId); //added this method
 }

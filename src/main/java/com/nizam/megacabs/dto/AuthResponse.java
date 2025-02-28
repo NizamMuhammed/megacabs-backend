@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class AuthResponse {
     private String userName;
     private String message;
-    // You can add other fields like a JWT token here if you use it
+    private String userId;
+    private String jwt;
 }

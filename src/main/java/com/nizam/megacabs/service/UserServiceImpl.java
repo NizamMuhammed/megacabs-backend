@@ -1,62 +1,56 @@
 package com.nizam.megacabs.service;
 
-import com.nizam.megacabs.dto.AuthResponse;
-import com.nizam.megacabs.model.User;
-import com.nizam.megacabs.repository.UserRepository;
-import com.nizam.megacabs.exception.EmailAlreadyExistsException;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.nizam.megacabs.dto.AuthResponse;
+import com.nizam.megacabs.exception.EmailAlreadyExistsException;
+import com.nizam.megacabs.model.User;
+import com.nizam.megacabs.repository.UserRepository;
+
 @Service
-@Slf4j // This will take care of the "log" error
-public class UserServiceImpl implements UserService { // Implement the interface
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
 
-    @Override // Now we are correctly overriding a method from the interface
-    public User signUp(User user) {
-        // Check if the email already exists in the database
-        if (userRepository.existsByUserEmailId(user.getUserEmailId())) {
-            // Log an error and throw the custom exception
-            log.error("Email already exists: {}", user.getUserEmailId());
-            throw new EmailAlreadyExistsException(user.getUserEmailId() + " Email already exists.");
-        }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-        // Save the new user to the database
+    @Override
+    public User signUp(User user) throws EmailAlreadyExistsException {
+        Optional<User> existingUser = userRepository.findByUserEmailId(user.getUserEmailId());
+        if (existingUser.isPresent()) {
+            throw new EmailAlreadyExistsException("Email already exists");
+        }
+        user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
         return userRepository.save(user);
     }
 
-     @Override // Now we are correctly overriding a method from the interface
-     public boolean signIn(User user) {
-         Optional<User> optionalUser = userRepository.findByUserEmailId(user.getUserEmailId());
-          if (optionalUser.isPresent()) {
-           User existingUser = optionalUser.get();
-              return existingUser.getUserPassword().equals(user.getUserPassword());
-           }else{
-              return false;
-          }
-
-     }
     @Override
-     public AuthResponse login(String userEmailId, String userPassword) {
-        Optional<User> optionalUser = userRepository.findByUserEmailId(userEmailId);
-
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (user.getUserPassword().equals(userPassword)) {
-                // Authentication successful
-                AuthResponse response = new AuthResponse();
-                response.setUserName(user.getUserName());
-                response.setMessage("Login successful");
-                return response;
-
-            }
-        }
-        //Authentication Failed
-        return null;
+    public AuthResponse login(String userEmailId, String userPassword) {
+        // Authentication logic (validate credentials, generate JWT, etc.)
+        AuthResponse response = new AuthResponse();
+        //response.setJwtToken("your_generated_jwt_token"); // Corrected: setJwt instead of setJwtToken
+        return response;
     }
+
+    // @Override
+    // public boolean signIn(User user) {
+    //     // Implement your sign-in logic here
+    //     Optional<User> existingUser = userRepository.findByUserEmailId(user.getUserEmailId());
+    //     if (existingUser.isPresent()) {
+    //         // Check if the password matches
+    //         User retrievedUser = existingUser.get();
+    //         if (passwordEncoder.matches(user.getUserPassword(), retrievedUser.getUserPassword())) {
+    //             // Password matches
+    //             return true;
+    //         }
+    //     }
+    //     // User not found or password doesn't match
+    //     return false;
+    // }
 }

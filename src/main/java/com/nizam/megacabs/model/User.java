@@ -8,16 +8,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Document(collection = "users")
-@Data // This annotation provides getter and setter methods
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-
     @Id
     private String id;
-
     private String userName;
     private String userEmailId;
     private String userPassword;
-    //no need to add getter and setter because of the @Data annotation
 }

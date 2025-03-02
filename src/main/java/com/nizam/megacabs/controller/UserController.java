@@ -19,12 +19,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register") // Updated path to /api/v1/users/register
-    public ResponseEntity<String> register(@RequestBody User user) {
+    public ResponseEntity<User> register(@RequestBody User user) {
         try {
-            userService.signUp(user); // Changed here
-            return new ResponseEntity<>("Registration successful", HttpStatus.OK);
+           User userSaved= userService.signUp(user); // Changed here
+            return new ResponseEntity<>(userSaved, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("Registration failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 }

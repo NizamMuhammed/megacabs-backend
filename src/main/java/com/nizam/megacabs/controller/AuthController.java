@@ -18,9 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nizam.megacabs.dto.AuthResponse;
 import com.nizam.megacabs.exception.EmailAlreadyExistsException;
+import com.nizam.megacabs.model.Role;
 import com.nizam.megacabs.model.User;
 import com.nizam.megacabs.service.UserService;
-import com.nizam.megacabs.util.JwtUtil;
+import com.nizam.megacabs.util.JwtUtil; 
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -48,8 +49,8 @@ public class AuthController {
             if (authentication.isAuthenticated()) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userEmailId);
                 String token = jwtUtil.generateToken(userDetails);
-                User user = userService.findByEmail(userEmailId); 
-                AuthResponse response = new AuthResponse(user.getUserName(), token, user.getUserId()); 
+                User user = userService.findByEmail(userEmailId);
+                AuthResponse response = new AuthResponse(user.getUserName(), token, user.getUserId(), user.getRoles()); // pass the roles to AuthResponse class
                 return ResponseEntity.ok(response);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
@@ -62,6 +63,10 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {
         try {
+            // Set the default role to "CUSTOMER" if no role is provided
+            if (user.getRoles() == null || user.getRoles().isEmpty()) {
+                user.getRoles().add(Role.CUSTOMER);
+            }
             User registeredUser = userService.signUp(user);
             return ResponseEntity.ok(registeredUser);
         } catch (EmailAlreadyExistsException e) {

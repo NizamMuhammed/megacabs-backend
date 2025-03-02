@@ -9,6 +9,5 @@ import com.nizam.megacabs.model.User;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
-    Optional<User> findByUserEmailId(String userEmailId);
-    boolean existsByUserEmailId(String userEmailId);
+    Optional<User> findByUserEmailId(String userEmailId); // Returning Optional<User>
 }

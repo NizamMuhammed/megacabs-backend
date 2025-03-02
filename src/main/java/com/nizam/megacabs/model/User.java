@@ -1,5 +1,8 @@
 package com.nizam.megacabs.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,4 +20,11 @@ public class User {
     private String userName;
     private String userEmailId;
     private String userPassword;
-}
+    private List<Role> roles = new ArrayList<>();
+    public List<Role> getRoles(){
+        return roles;
+   }
+   public void setRoles(List<Role> roles){
+        this.roles = roles;
+   }
+   }

@@ -9,7 +9,7 @@ import com.nizam.megacabs.model.Booking;
 import com.nizam.megacabs.repository.BookingRepository;
 
 @Service
-public class BookingServiceImpl implements BookingService{
+public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private BookingRepository bookingRepository;
@@ -20,18 +20,12 @@ public class BookingServiceImpl implements BookingService{
     }
 
     @Override
-    public List<Booking> getAllBookings() {
-        return bookingRepository.findAll();
-    }
-
-    @Override
     public void deleteBooking(String id) {
         bookingRepository.deleteById(id);
     }
 
     @Override
     public List<Booking> getBookingsByUser(String userId) {
-        return bookingRepository.findByUserId(userId); //added this method
+        return bookingRepository.findByUserId(userId);
     }
-
 }

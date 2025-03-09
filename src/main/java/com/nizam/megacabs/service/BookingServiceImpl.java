@@ -28,4 +28,26 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> getBookingsByUser(String userId) {
         return bookingRepository.findByUserId(userId);
     }
+
+    @Override
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
+    }
+
+    @Override
+    public Booking assignDriver(String bookingId, String driverId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        booking.setDriverId(driverId);
+        booking.setStatus("ASSIGNED");
+        return bookingRepository.save(booking);
+    }
+
+    @Override
+    public Booking updateBookingStatus(String bookingId, String status) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        booking.setStatus(status);
+        return bookingRepository.save(booking);
+    }
 }

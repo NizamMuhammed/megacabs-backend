@@ -20,4 +20,6 @@ public class Booking {
     private String cabType; // Added this field
     private int price;
     private String userId;
+    private String driverId;
+    private String status = "PENDING";
 }

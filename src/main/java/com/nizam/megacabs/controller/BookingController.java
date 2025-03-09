@@ -1,16 +1,19 @@
 package com.nizam.megacabs.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,6 +61,33 @@ public class BookingController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Booking>> getAllBookings() {
+        List<Booking> bookings = bookingService.getAllBookings();
+        return ResponseEntity.ok(bookings);
+    }
+
+    @PutMapping("/{bookingId}/assign-driver")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Booking> assignDriver(
+            @PathVariable String bookingId,
+            @RequestBody Map<String, String> payload) {
+        String driverId = payload.get("driverId");
+        Booking updatedBooking = bookingService.assignDriver(bookingId, driverId);
+        return ResponseEntity.ok(updatedBooking);
+    }
+
+    @PutMapping("/{bookingId}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Booking> updateBookingStatus(
+            @PathVariable String bookingId,
+            @RequestBody Map<String, String> payload) {
+        String status = payload.get("status");
+        Booking updatedBooking = bookingService.updateBookingStatus(bookingId, status);
+        return ResponseEntity.ok(updatedBooking);
     }
 
     @DeleteMapping("/{id}")

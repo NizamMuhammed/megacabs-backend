@@ -6,7 +6,9 @@ import com.nizam.megacabs.model.Booking;
 
 public interface BookingService {
     public Booking addBooking(Booking booking);
-    //remove this line : public List<Booking> getAllBookings();
+    List<Booking> getAllBookings();
     public void deleteBooking(String id);
-    List<Booking> getBookingsByUser(String userId); //added this method
+    List<Booking> getBookingsByUser(String userId);
+    Booking assignDriver(String bookingId, String driverId);
+    Booking updateBookingStatus(String bookingId, String status);
 }

@@ -56,7 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/v1/cabs/**").permitAll()
                         .requestMatchers("/api/v1/drivers/**").permitAll()
-                        .requestMatchers("/api/v1/bookings/**").hasAnyAuthority("ADMIN", "CUSTOMER", "DRIVER")
+                        .requestMatchers("/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_DRIVER")
                         .requestMatchers("/api/v1/cars/**").permitAll()
                         .requestMatchers("/api/v1/users/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated())

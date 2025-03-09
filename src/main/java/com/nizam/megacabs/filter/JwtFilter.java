@@ -2,6 +2,8 @@ package com.nizam.megacabs.filter;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +26,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private ApplicationContext applicationContext;
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
 
     @Autowired
     public JwtFilter(JwtUtil jwtUtil, ApplicationContext applicationContext) {
@@ -49,6 +53,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                logger.info("User {} authenticated with authorities: {}", username, userDetails.getAuthorities());
             }
         }
         filterChain.doFilter(request, response);

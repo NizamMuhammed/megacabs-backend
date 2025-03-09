@@ -2,7 +2,6 @@ package com.nizam.megacabs.model;
 
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -21,16 +20,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Car {
     @Id
-    private ObjectId carId; // Changed field name to carId
-    private String carName; // Changed field name to carName
-    private String carType; // Changed field name to carType
-    private String carNumber; // Changed field name to carNumber
-    private String carStatus; // Changed cabStatus to string to represent one status
-    private String carLocation; // Changed cabLocation to string to represent one location
-    private String carCapacity; // Changed field name to carCapacity
-    private String carDescription; // Changed field name to carDescription
-    private String carImage; // Changed field name to carImage
-    private String carBrand; // Changed field name to carBrand
+    private String carId; // Changed from ObjectId to String
+    private String carName;
+    private String carType;
+    private String carNumber;
+    private String carStatus;
+    private String carLocation;
+    private String carCapacity;
+    private String carDescription;
+    private String carImage;
+    private String carBrand;
     @DocumentReference
     private List<Review> reviewIds;
     private Boolean isAvailable;

@@ -3,12 +3,10 @@ package com.nizam.megacabs.controller;
 import com.nizam.megacabs.exception.CarAlreadyExistsException;
 import com.nizam.megacabs.model.Car;
 import com.nizam.megacabs.service.CarService;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +24,7 @@ public class CarController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Car>> getCarById(@PathVariable ObjectId id) {
+    public ResponseEntity<Optional<Car>> getCarById(@PathVariable String id) {
         return new ResponseEntity<Optional<Car>>(carService.getCarById(id), HttpStatus.OK);
     }
 
@@ -47,7 +45,7 @@ public class CarController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCar(@PathVariable ObjectId id) {
+    public ResponseEntity<String> deleteCar(@PathVariable String id) {
         carService.deleteCar(id);
         return new ResponseEntity<String>("Car deleted successfully",HttpStatus.OK);
     }

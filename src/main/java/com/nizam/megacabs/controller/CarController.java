@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +22,12 @@ public class CarController {
     private CarService carService;
 
     @GetMapping
-    public ResponseEntity<List<Car>> getAllCars() {
-        return new ResponseEntity<List<Car>>(carService.getAllCars(), HttpStatus.OK);
+    public ResponseEntity<Page<Car>> getAllCars(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "carName") String sort) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sort));
+        return new ResponseEntity<>(carService.getAllCars(pageRequest), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

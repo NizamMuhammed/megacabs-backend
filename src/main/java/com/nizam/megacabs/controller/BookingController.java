@@ -70,6 +70,13 @@ public class BookingController {
         return ResponseEntity.ok(bookings);
     }
 
+    @GetMapping("/driver/{driverId}")
+    @PreAuthorize("hasRole('DRIVER')")
+    public ResponseEntity<List<Booking>> getDriverBookings(@PathVariable String driverId) {
+        List<Booking> driverBookings = bookingService.getBookingsByDriver(driverId);
+        return ResponseEntity.ok(driverBookings);
+    }
+
     @PutMapping("/{bookingId}/assign-driver")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Booking> assignDriver(

@@ -9,6 +9,7 @@ public interface BookingService {
     List<Booking> getAllBookings();
     public void deleteBooking(String id);
     List<Booking> getBookingsByUser(String userId);
+    List<Booking> getBookingsByDriver(String driverId);
     Booking assignDriver(String bookingId, String driverId);
     Booking updateBookingStatus(String bookingId, String status);
 }

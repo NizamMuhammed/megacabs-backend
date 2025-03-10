@@ -54,11 +54,8 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/error").permitAll()
-                        .requestMatchers("/api/v1/cabs/**").permitAll()
-                        .requestMatchers("/api/v1/drivers/**").permitAll()
-                        .requestMatchers("/api/v1/bookings/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_DRIVER")
-                        .requestMatchers("/api/v1/cars/**").permitAll()
-                        .requestMatchers("/api/v1/users/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/bookings/driver/**").hasRole("DRIVER")  // Use hasRole instead of hasAuthority
+                        .requestMatchers("/api/v1/bookings/all").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
@@ -68,10 +65,10 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService(passwordEncoder()));
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        return authenticationProvider;
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService(passwordEncoder()));
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
     }
 
     @Bean

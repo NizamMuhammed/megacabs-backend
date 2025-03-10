@@ -50,4 +50,9 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(status);
         return bookingRepository.save(booking);
     }
+
+    @Override
+    public List<Booking> getBookingsByDriver(String driverId) {
+        return bookingRepository.findByDriverId(driverId);
+    }
 }

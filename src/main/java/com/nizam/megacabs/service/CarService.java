@@ -1,14 +1,13 @@
 package com.nizam.megacabs.service;
 
-import java.util.List;
 import java.util.Optional;
 
-import org.bson.types.ObjectId; // added import
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired; // added import
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import com.nizam.megacabs.exception.CarAlreadyExistsException;
 import com.nizam.megacabs.model.Car;
@@ -45,5 +44,9 @@ public class CarService {
     public void deleteCar(String id) {
         // Convert String to ObjectId
         carRepository.deleteById(new ObjectId(id));
+    }
+
+    public long count() {
+        return carRepository.count();
     }
 }

@@ -1,6 +1,7 @@
 package com.nizam.megacabs.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.nizam.megacabs.model.Booking;
 
@@ -12,4 +13,7 @@ public interface BookingService {
     List<Booking> getBookingsByDriver(String driverId);
     Booking assignDriver(String bookingId, String driverId);
     Booking updateBookingStatus(String bookingId, String status);
+    long count();
+    List<Booking> getRecentBookings();
+    Map<String, Double> getRevenue();
 }

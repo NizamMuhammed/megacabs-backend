@@ -101,4 +101,25 @@ public class BookingController {
     public void deleteBooking(@PathVariable String id) {
         bookingService.deleteBooking(id);
     }
+
+    @GetMapping("/count")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Long> getBookingCount() {
+        long count = bookingService.count();
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/recent")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Booking>> getRecentBookings() {
+        List<Booking> recentBookings = bookingService.getRecentBookings();
+        return ResponseEntity.ok(recentBookings);
+    }
+
+    @GetMapping("/revenue")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Map<String, Double>> getRevenue() {
+        Map<String, Double> revenue = bookingService.getRevenue();
+        return ResponseEntity.ok(revenue);
+    }
 }

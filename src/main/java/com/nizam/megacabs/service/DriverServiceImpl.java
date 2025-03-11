@@ -44,4 +44,9 @@ public class DriverServiceImpl implements DriverService {
     public void deleteDriver(String id) {
         driverRepository.deleteById(id);
     }
+
+    @Override
+    public List<Driver> getActiveDrivers() {
+        return driverRepository.findByDriverStatus("AVAILABLE");
+    }
 }

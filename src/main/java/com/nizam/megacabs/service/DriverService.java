@@ -11,4 +11,5 @@ public interface DriverService {
     Driver createDriver(Driver driver);
     Driver updateDriver(String id, Driver driver);
     void deleteDriver(String id);
+    List<Driver> getActiveDrivers();
 }

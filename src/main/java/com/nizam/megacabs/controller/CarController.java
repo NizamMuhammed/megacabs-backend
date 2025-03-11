@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,5 +56,12 @@ public class CarController {
     public ResponseEntity<String> deleteCar(@PathVariable String id) {
         carService.deleteCar(id);
         return new ResponseEntity<String>("Car deleted successfully",HttpStatus.OK);
+    }
+
+    @GetMapping("/count")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Long> getCarCount() {
+        long count = carService.count();
+        return ResponseEntity.ok(count);
     }
 }

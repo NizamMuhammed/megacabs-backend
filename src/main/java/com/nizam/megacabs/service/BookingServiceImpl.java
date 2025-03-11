@@ -1,6 +1,9 @@
 package com.nizam.megacabs.service;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,5 +57,39 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> getBookingsByDriver(String driverId) {
         return bookingRepository.findByDriverId(driverId);
+    }
+
+    @Override
+    public long count() {
+        return bookingRepository.count();
+    }
+
+    @Override
+    public List<Booking> getRecentBookings() {
+        return bookingRepository.findTop5ByOrderByDateDesc();
+    }
+
+    @Override
+    public Map<String, Double> getRevenue() {
+        LocalDate today = LocalDate.now();
+        List<Booking> dailyBookings = bookingRepository.findByDate(today.toString());
+        List<Booking> monthlyBookings = bookingRepository.findByDateBetween(
+            today.withDayOfMonth(1).toString(),
+            today.toString()
+        );
+
+        double dailyRevenue = dailyBookings.stream()
+            .mapToDouble(Booking::getPrice)
+            .sum();
+        
+        double monthlyRevenue = monthlyBookings.stream()
+            .mapToDouble(Booking::getPrice)
+            .sum();
+
+        Map<String, Double> revenue = new HashMap<>();
+        revenue.put("daily", dailyRevenue);
+        revenue.put("monthly", monthlyRevenue);
+        
+        return revenue;
     }
 }

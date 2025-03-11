@@ -1,5 +1,6 @@
 package com.nizam.megacabs.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.nizam.megacabs.exception.EmailAlreadyExistsException;
+import com.nizam.megacabs.model.Role;
 import com.nizam.megacabs.model.User;
 import com.nizam.megacabs.repository.UserRepository;
 
@@ -95,6 +97,49 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         } catch (Exception e) {
             logger.error("Error loading user: {}", e.getMessage());
             throw new UsernameNotFoundException("Error loading user: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public void deleteUser(String userId) {
+        // Check if user exists
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            // Don't allow deleting the last admin
+            User user = userOptional.get();
+            if (user.getRoles().contains(Role.ADMIN)) {
+                long adminCount = userRepository.findAll().stream()
+                    .filter(u -> u.getRoles().contains(Role.ADMIN))
+                    .count();
+                if (adminCount <= 1) {
+                    throw new RuntimeException("Cannot delete the last admin user");
+                }
+            }
+            userRepository.deleteById(userId);
+        } else {
+            throw new RuntimeException("User not found with id: " + userId);
+        }
+    }
+
+    @Override
+    public long count() {
+        return userRepository.count();
+    }
+
+    @Override
+    public long countDrivers() {
+        try {
+            return userRepository.findAll().stream()
+                .filter(user -> user.getRoles() != null && user.getRoles().contains(Role.DRIVER))
+                .count();
+        } catch (Exception e) {
+            logger.error("Error counting drivers: {}", e.getMessage());
+            return 0;
         }
     }
 }

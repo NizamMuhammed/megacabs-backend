@@ -11,4 +11,7 @@ import com.nizam.megacabs.model.Booking;
 public interface BookingRepository extends MongoRepository<Booking, String> {
     List<Booking> findByUserId(String userId);
     List<Booking> findByDriverId(String driverId);
+    List<Booking> findTop5ByOrderByDateDesc();
+    List<Booking> findByDate(String date);
+    List<Booking> findByDateBetween(String startDate, String endDate);
 }

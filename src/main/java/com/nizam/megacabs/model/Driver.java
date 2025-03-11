@@ -7,10 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "drivers")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Document(collection = "drivers")
 public class Driver {
     @Id
     private String driverId;
@@ -18,5 +18,6 @@ public class Driver {
     private String licenseNumber;
     private String driverEmailId;
     private String driverPhone;
-    private String driverStatus;
+    private String driverStatus;  // AVAILABLE, UNAVAILABLE, ON_TRIP
+    private String userId;        // Reference to User document
 }

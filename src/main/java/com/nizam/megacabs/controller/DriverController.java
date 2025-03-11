@@ -1,6 +1,7 @@
 package com.nizam.megacabs.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,13 @@ public class DriverController {
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Driver> getDriverByUserId(@PathVariable String userId) {
+        Optional<Driver> driver = driverService.findByUserId(userId);
+        return driver.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @PostMapping
     public ResponseEntity<Driver> createDriver(@RequestBody Driver driver) {
         try {
@@ -58,6 +66,20 @@ public class DriverController {
             return new ResponseEntity<>(updatedDriver, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('DRIVER')")
+    public ResponseEntity<Driver> updateDriverStatus(
+            @PathVariable String id,
+            @RequestBody Map<String, String> payload) {
+        try {
+            String status = payload.get("driverStatus");
+            Driver driver = driverService.updateDriverStatus(id, status);
+            return ResponseEntity.ok(driver);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

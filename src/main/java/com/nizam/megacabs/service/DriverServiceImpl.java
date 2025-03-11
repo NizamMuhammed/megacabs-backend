@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import com.nizam.megacabs.repository.UserRepository;
 
 @Service
 public class DriverServiceImpl implements DriverService {
+
+    private static final Logger logger = LoggerFactory.getLogger(DriverServiceImpl.class);
 
     @Autowired
     private DriverRepository driverRepository;
@@ -69,5 +73,24 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public List<Driver> getActiveDrivers() {
         return driverRepository.findByDriverStatus("AVAILABLE");
+    }
+
+    @Override
+    public Optional<Driver> findByUserId(String userId) {
+        return driverRepository.findByUserUserId(userId);
+    }
+
+    @Override
+    public Driver updateDriverStatus(String id, String status) {
+        Optional<Driver> existingDriver = driverRepository.findById(id);
+        if (existingDriver.isPresent()) {
+            Driver driver = existingDriver.get();
+            driver.setDriverStatus(status);
+            Driver savedDriver = driverRepository.save(driver);
+            logger.info("Updated driver {} status to {}", id, status);
+            return savedDriver;
+        }
+        logger.error("Driver not found with id: {}", id);
+        throw new RuntimeException("Driver not found with id: " + id);
     }
 }

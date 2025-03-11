@@ -54,7 +54,8 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/error").permitAll()
-                        .requestMatchers("/api/v1/bookings/driver/**").hasRole("DRIVER")  // Use hasRole instead of hasAuthority
+                        .requestMatchers("/api/v1/drivers/user/**").hasRole("DRIVER")
+                        .requestMatchers("/api/v1/bookings/driver/**").hasRole("DRIVER")
                         .requestMatchers("/api/v1/bookings/all").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

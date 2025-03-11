@@ -3,6 +3,8 @@ package com.nizam.megacabs.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ import com.nizam.megacabs.service.UserService;
 @RestController
 @RequestMapping("/api/v1/bookings")
 public class BookingController {
+    private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
 
     @Autowired
     private BookingService bookingService;
@@ -73,8 +76,15 @@ public class BookingController {
     @GetMapping("/driver/{driverId}")
     @PreAuthorize("hasRole('DRIVER')")
     public ResponseEntity<List<Booking>> getDriverBookings(@PathVariable String driverId) {
-        List<Booking> driverBookings = bookingService.getBookingsByDriver(driverId);
-        return ResponseEntity.ok(driverBookings);
+        try {
+            logger.info("Fetching bookings for driver: {}", driverId);
+            List<Booking> driverBookings = bookingService.getBookingsByDriver(driverId);
+            logger.info("Found {} bookings for driver {}", driverBookings.size(), driverId);
+            return ResponseEntity.ok(driverBookings);
+        } catch (Exception e) {
+            logger.error("Error fetching bookings for driver {}: {}", driverId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PutMapping("/{bookingId}/assign-driver")
@@ -88,7 +98,7 @@ public class BookingController {
     }
 
     @PutMapping("/{bookingId}/status")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DRIVER')")  // Allow both ADMIN and DRIVER
     public ResponseEntity<Booking> updateBookingStatus(
             @PathVariable String bookingId,
             @RequestBody Map<String, String> payload) {

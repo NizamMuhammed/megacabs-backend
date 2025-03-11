@@ -12,4 +12,6 @@ public interface DriverService {
     Driver updateDriver(String id, Driver driver);
     void deleteDriver(String id);
     List<Driver> getActiveDrivers();
+    Optional<Driver> findByUserId(String userId);
+    Driver updateDriverStatus(String id, String status);
 }

@@ -29,9 +29,4 @@ jobs:
       - name: Build with npm
         run: npm ci && npm run build
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: frontend-build
-          path: frontend/build
-          retention-days: 1
+      
